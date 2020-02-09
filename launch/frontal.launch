@@ -1,0 +1,42 @@
+<launch>
+  <arg name="baseframe" default="base_frame" />
+  <arg name="cameraframe" default="camera_frame_depth" />
+  <arg name="laserframe" default="laser_frame" />
+  <arg name="lasertopic" default="/scan" />
+  <arg name="use_thin_xtion" default="false" />
+
+  <arg name="pi/2" value="1.5707963267948966" />
+  <arg name="pi" value="3.14159265359" />
+  <arg name="prefix" value="d2l_" />
+
+  <!-- frontal camera -->
+  <node pkg="tf" type="static_transform_publisher" name="$(arg prefix)camera_link" args="0 0 0.5  -1.57 0 -1.57 $(arg baseframe) $(arg cameraframe) 1000" />   
+
+  <!-- tilted down camera -->
+  <!-- node pkg="tf" type="static_transform_publisher" name="$(arg prefix)camera_link" args="0 0 0.5  -1.57 0 -1.77 $(arg baseframe) $(arg cameraframe) 1000" / -->  
+
+
+  <!-- virtual laser -->
+  <node pkg="tf" type="static_transform_publisher" name="$(arg prefix)laser_link" args="0 0 0.2 0 0 0 $(arg baseframe) $(arg laserframe) 1000" />
+
+ 
+  <!-- thin_xtion node -->
+  <group if="$(arg use_thin_xtion)">
+    <node pkg="thin_xtion" type="thin_xtion_node" name="xtion" output="screen">
+      <param name="device_num" value="0"/>
+      <param name="rgb_mode" value="0"/>
+      <param name="depth_mode" value="0"/>
+	</node>
+  </group>
+
+
+  <!-- depth2laser node -->
+  <node pkg="depth2laser" type="depth2laser_node" name="depth2laser" output="screen">
+  	<param name="publish_pointcloud" value="1" type="int"/>
+	<param name="base_frame_id" value="$(arg baseframe)" />
+	<param name="laser_frame_id" value="$(arg laserframe)" />
+    <param name="laser_topic" value="$(arg lasertopic)" /> 
+  </node>
+
+</launch>
+

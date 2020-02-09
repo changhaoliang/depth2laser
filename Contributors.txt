@@ -1,0 +1,6 @@
+This package was originally developed by Maurilio Di Cicco.
+It has been generalized to be adapted for both ROS and NAOqi systems by:
+
+Maria T. Lazaro
+Jiashi Zhang
+Changhao Liang

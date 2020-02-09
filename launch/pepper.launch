@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <launch>
-  <arg name="baseframe" default="base_frame" />
+  <arg name="baseframe" default="base_footprint" />
   <arg name="cameraframe" default="camera_link" />
   <arg name="laserframe" default="laser_frame" />
   <arg name="lasertopic" default="/scan" />
@@ -8,15 +8,17 @@
 
   <arg name="pi/2" value="1.5707963267948966" />
   <arg name="pi" value="3.14159265359" />
-  <arg name="prefix" value="" />
+  <arg name="prefix" value="naoqi_driver" />
+  <arg name="cameraimagetopic" value="camera/depth/image_raw" />
+  <arg name="camerainfotopic" value="camera/depth/camera_info" />  
 
-  <!-- frontal camera -->
+  <!-- frontal camera 
   <node pkg="tf" type="static_transform_publisher" name="$(arg prefix)camera_link" args="0 0 0.5  0 0 0 $(arg baseframe) $(arg cameraframe) 1000" />   
-
+  -->
 
 
   <!-- virtual laser -->
-  <node pkg="tf" type="static_transform_publisher" name="$(arg prefix)laser_link" args="0 0 1 0 0 0 $(arg baseframe) $(arg laserframe) 1000" />
+  <node pkg="tf" type="static_transform_publisher" name="$(arg prefix)laser_link" args="0 0 0.4 0 0 0 $(arg baseframe) $(arg laserframe) 1000" />
 
  
 
@@ -25,7 +27,9 @@
   	<param name="publish_pointcloud" value="1" type="int"/>
 	<param name="base_frame_id" value="$(arg baseframe)" />
 	<param name="laser_frame_id" value="$(arg laserframe)" />
-    <param name="laser_topic" value="$(arg lasertopic)" /> 
+	<param name="laser_topic" value="$(arg lasertopic)" />
+	<param name="camera_image_topic" value="/$(arg prefix)/$(arg cameraimagetopic)" />
+	<param name="camera_info_topic" value="/$(arg prefix)/$(arg camerainfotopic)" />
   </node>
 
 </launch>
